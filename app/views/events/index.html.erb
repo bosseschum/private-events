@@ -1,0 +1,31 @@
+<%= turbo_frame_tag 'events' do %>
+  <div class="min-h-screen bg-gray-950 text-white p-6">
+    <%# Header %>
+    <div class="mb-6 flex items-center justify-between">
+        <h1 class="text-3xl font-bold mb-6">Events</h1>
+        <% if user_signed_in? %>
+            <%= link_to "Log Out", destroy_user_session_path, class: 'text-blue-400 hover:underline' %>
+        <% else %>
+            <%= link_to "Log In", new_user_session_path, class: 'text-blue-400 hover:underline' %>
+        <% end %>
+    </div>
+    <nav class="mb-6">
+        <ul class="flex space-x-4">
+            <li><%= link_to "Events", events_path %></li>
+            <li><%= link_to "New Event", new_event_path %></li>
+        </ul>
+    </nav>
+    <div class="mb-4 grid grid-cols-2 gap-2">
+      <% @events.each do |event| %>
+        <div class="bg-gray-800 p-4 rounded-lg">
+          <h2 class="text-2xl font-bold mb-2"><%= event.name %></h2>
+          <p class="mb-2"><%= event.description %></p>
+          <p class="mb-2"><%= event.date %></p>
+          <div class="mt-4">
+            <%= link_to 'View Details', event_path(event), class: 'text-blue-400 hover:underline' %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% end %>
