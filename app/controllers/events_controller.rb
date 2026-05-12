@@ -1,5 +1,6 @@
 class EventsController < ApplicationController
   before_action :authenticate_user!, except: [ :index, :show ]
+  before_action :authorize_creator!, only: [ :edit, :update, :destroy ]
   before_action :set_event, only: [ :show, :edit, :update, :destroy ]
 
   def index
@@ -7,7 +8,6 @@ class EventsController < ApplicationController
   end
 
   def show
-    set_event
     @registration = Registration.find_by(attendee: current_user, event: @event)
   end
 
@@ -26,11 +26,9 @@ class EventsController < ApplicationController
   end
 
   def edit
-    set_event
   end
 
   def update
-    set_event
     if @event.update(event_params)
       redirect_to @event
     else
@@ -39,7 +37,6 @@ class EventsController < ApplicationController
   end
 
   def destroy
-    set_event
     @event.destroy
     redirect_to events_path
   end
@@ -48,6 +45,10 @@ class EventsController < ApplicationController
 
   def set_event
     @event = Event.find(params[:id])
+  end
+
+  def authorize_creator!
+    redirect_to root_path unless @event.creator == current_user
   end
 
   def event_params
