@@ -1,25 +1,34 @@
 <div class="bg-gray-800 rounded-xl p-6 max-w-lg">
-    <nav>
-        <ul class="flex gap-4">
-            <li><%= link_to "Home", root_path %></li>
-            <li><%= link_to "Logout", destroy_user_session_path, data: { turbo_method: :delete } %></li>
-        </ul>
-    </nav>
-    <h1 class="text-2xl font-bold"><%= @user.username %></h1>
-    <p class="text-gray-400"><%= @user.email %></p>
-    <p class="text-gray-400"><%= link_to "Edit Profile", edit_user_registration_path %></p>
+  <nav>
+    <ul class="flex gap-4">
+      <li><%= link_to "Home", root_path %></li>
+      <li><%= link_to "Logout", destroy_user_session_path, data: { turbo_method: :delete } %></li>
+    </ul>
+  </nav>
+  <h1 class="text-2xl font-bold"><%= @user.username %></h1>
+  <p class="text-gray-400"><%= @user.email %></p>
+  <p class="text-gray-400"><%= link_to "Edit Profile", edit_user_registration_path %></p>
 
-    <h2 class="text-xl font-bold mt-6"><%= @user.hosted_events.count + @user.attended_events.count %> Events</h2>
-    <ul class="mt-4">
-        <h2 class="text-xl font-bold"><%= @user.hosted_events.count %> Hosted Events</h2>
-        <% @user.hosted_events.each do |event| %>
+  <h2 class="text-xl font-bold mt-6"><%= @user.hosted_events.count + @user.attended_events.count %> Events</h2>
+  <ul class="mt-4">
+    <h2 class="text-xl font-bold"><%= @user.hosted_events.count %> Hosted Events</h2>
+    <% @user.hosted_events.each do |event| %>
+      <li><%= link_to event.title, event_path(event) %></li>
+    <% end %>
+  </ul>
+  <ul class="mt-4">
+    <h2 class="text-xl font-bold"><%= @user.attended_events.count %> Attended Events</h2>
+    <% @user.attended_events.each do |event| %>
+      <div>
+        <p>
+          <% if event.date.before?(Time.now) %>
+            Past Events
+          <% else %>
+            Upcoming Events
+          <% end %>
           <li><%= link_to event.title, event_path(event) %></li>
-        <% end %>
-    </ul>
-    <ul class="mt-4">
-        <h2 class="text-xl font-bold"><%= @user.attended_events.count %> Attended Events</h2>
-        <% @user.attended_events.each do |event| %>
-          <li><%= link_to event.title, event_path(event) %></li>
-        <% end %>
-    </ul>
+        </p>
+      </div>
+    <% end %>
+  </ul>
 </div>
