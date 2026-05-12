@@ -1,0 +1,20 @@
+<div class="bg-gray-950 rounded-xl p-6 max-w-lg">
+    <h1 class="text-3xl font-bold mb-4"><%= @event.title %></h1>
+    <p class="mb-2"><%= @event.description %></p>
+    <p class="mb-2"><%= @event.date %></p>
+    <p class="mb-2"><%= @event.location %></p>
+    <div class="mt-4">
+        <% if user_signed_in? && current_user == @event.creator %>
+            <%= link_to "Edit", edit_event_path(@event) %>
+            <%= link_to "Delete", event_path(@event), method: :delete, data: { confirm: "Are you sure?" } %>
+        <% else %>
+          <% if user_signed_in? && @event.attendees.include?(current_user) %>
+              <%= link_to "Cancel", event_registration_path(@event, @registration), method: :delete, data: { confirm: "Are you sure?" } %>
+          <% elsif user_signed_in? %>
+              <%= link_to "Join", event_registrations_path(@event), method: :post %>
+          <% else %>
+              <%= link_to "Sign up to join", new_user_session_path %>
+          <% end %>
+        <% end %>
+    </div>
+</div>
