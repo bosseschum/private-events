@@ -1,20 +1,21 @@
-<div class="bg-gray-950 rounded-xl p-6 max-w-lg">
-    <h1 class="text-3xl font-bold mb-4"><%= @event.title %></h1>
-    <p class="mb-2"><%= @event.description %></p>
-    <p class="mb-2"><%= @event.date %></p>
-    <p class="mb-2"><%= @event.location %></p>
-    <div class="mt-4">
-        <% if user_signed_in? && current_user == @event.creator %>
-            <%= link_to "Edit", edit_event_path(@event) %>
-            <%= link_to "Delete", event_path(@event), method: :delete, data: { confirm: "Are you sure?" } %>
-        <% else %>
-          <% if user_signed_in? && @event.attendees.include?(current_user) %>
-              <%= link_to "Cancel", event_registration_path(@event, @registration), method: :delete, data: { confirm: "Are you sure?" } %>
-          <% elsif user_signed_in? %>
-              <%= link_to "Join", event_registrations_path(@event), method: :post %>
-          <% else %>
-              <%= link_to "Sign up to join", new_user_session_path %>
-          <% end %>
-        <% end %>
-    </div>
+<div class="bg-gray-800 rounded-xl p-6 max-w-lg">
+  <h1 class="text-3xl font-bold mb-4"><%= @event.title %></h1>
+  <p class="text-gray-300 mb-2"><%= @event.description %></p>
+  <p class="text-gray-400 text-sm mb-1"><%= @event.date %></p>
+  <p class="text-gray-400 text-sm mb-4"><%= @event.location %></p>
+
+  <div class="mt-4 flex gap-3">
+    <% if user_signed_in? && current_user == @event.creator %>
+      <%= link_to "Edit", edit_event_path(@event), class: "text-blue-400 hover:underline" %>
+      <%= link_to "Delete", event_path(@event), data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }, class: "text-red-400 hover:underline" %>
+    <% else %>
+      <% if user_signed_in? && @event.attendees.include?(current_user) %>
+        <%= link_to "Cancel Attendance", event_registration_path(@event, @registration), data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }, class: "text-red-400 hover:underline" %>
+      <% elsif user_signed_in? %>
+        <%= link_to "Join Event", event_registrations_path(@event), data: { turbo_method: :post }, class: "bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded transition-colors" %>
+      <% else %>
+        <%= link_to "Sign up to join", new_user_session_path, class: "text-blue-400 hover:underline" %>
+      <% end %>
+    <% end %>
+  </div>
 </div>
