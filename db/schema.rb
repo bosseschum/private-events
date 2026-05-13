@@ -10,15 +10,28 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_11_152229) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_13_100047) do
   create_table "events", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.integer "creator_id"
     t.datetime "date"
     t.text "description"
+    t.boolean "is_public", default: false, null: false
     t.string "location"
     t.string "title"
     t.datetime "updated_at", null: false
+  end
+
+  create_table "invitations", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.integer "event_id", null: false
+    t.integer "recipient_id", null: false
+    t.integer "sender_id", null: false
+    t.integer "status"
+    t.datetime "updated_at", null: false
+    t.index ["event_id"], name: "index_invitations_on_event_id"
+    t.index ["recipient_id"], name: "index_invitations_on_recipient_id"
+    t.index ["sender_id"], name: "index_invitations_on_sender_id"
   end
 
   create_table "registrations", force: :cascade do |t|
@@ -40,4 +53,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_11_152229) do
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
+
+  add_foreign_key "invitations", "events"
+  add_foreign_key "invitations", "users", column: "recipient_id"
+  add_foreign_key "invitations", "users", column: "sender_id"
 end
