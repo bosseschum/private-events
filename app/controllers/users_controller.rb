@@ -1,6 +1,10 @@
 class UsersController < ApplicationController
     def show
         @user = User.find(params[:id])
+        @upcoming_hosted = @user.hosted_events.upcoming
+        @past_hosted = @user.hosted_events.past
+        @upcoming_attended = @user.attended_events.upcoming
+        @past_attended = @user.attended_events.past
     end
 
     def new

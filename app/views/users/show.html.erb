@@ -1,34 +1,76 @@
-<div class="bg-gray-800 rounded-xl p-6 max-w-lg">
-  <nav>
-    <ul class="flex gap-4">
-      <li><%= link_to "Home", root_path %></li>
-      <li><%= link_to "Logout", destroy_user_session_path, data: { turbo_method: :delete } %></li>
+<div class="bg-gray-800 rounded-xl p-6 max-w-2xl">
+  <nav class="mb-6">
+    <ul class="flex gap-4 text-blue-400">
+      <li><%= link_to "Home", root_path, class: "hover:underline" %></li>
+      <li><%= link_to "Logout", destroy_user_session_path, data: { turbo_method: :delete }, class: "hover:underline" %></li>
     </ul>
   </nav>
-  <h1 class="text-2xl font-bold"><%= @user.username %></h1>
-  <p class="text-gray-400"><%= @user.email %></p>
-  <p class="text-gray-400"><%= link_to "Edit Profile", edit_user_registration_path %></p>
 
-  <h2 class="text-xl font-bold mt-6"><%= @user.hosted_events.count + @user.attended_events.count %> Events</h2>
-  <ul class="mt-4">
-    <h2 class="text-xl font-bold"><%= @user.hosted_events.count %> Hosted Events</h2>
-    <% @user.hosted_events.each do |event| %>
-      <li><%= link_to event.title, event_path(event) %></li>
+  <h1 class="text-2xl font-bold"><%= @user.username %></h1>
+  <p class="text-gray-400 mb-1"><%= @user.email %></p>
+  <p class="mb-6"><%= link_to "Edit Profile", edit_user_registration_path, class: "text-blue-400 hover:underline text-sm" %></p>
+
+  <section class="mb-8">
+    <h2 class="text-xl font-bold mb-3">Hosted Events</h2>
+
+    <h3 class="text-sm font-semibold uppercase tracking-wide text-gray-400 mb-2">Upcoming (<%= @upcoming_hosted.count %>)</h3>
+    <% if @upcoming_hosted.any? %>
+      <ul class="mb-4 space-y-1">
+        <% @upcoming_hosted.each do |event| %>
+          <li class="flex items-center justify-between">
+            <%= link_to event.title, event_path(event), class: "text-blue-400 hover:underline" %>
+            <span class="text-gray-500 text-sm"><%= event.date.strftime("%b %-d, %Y") %></span>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p class="text-gray-500 text-sm mb-4">None.</p>
     <% end %>
-  </ul>
-  <ul class="mt-4">
-    <h2 class="text-xl font-bold"><%= @user.attended_events.count %> Attended Events</h2>
-    <% @user.attended_events.each do |event| %>
-      <div>
-        <p>
-          <% if event.date.before?(Time.now) %>
-            Past Events
-          <% else %>
-            Upcoming Events
-          <% end %>
-          <li><%= link_to event.title, event_path(event) %></li>
-        </p>
-      </div>
+
+    <h3 class="text-sm font-semibold uppercase tracking-wide text-gray-400 mb-2">Past (<%= @past_hosted.count %>)</h3>
+    <% if @past_hosted.any? %>
+      <ul class="space-y-1">
+        <% @past_hosted.each do |event| %>
+          <li class="flex items-center justify-between">
+            <%= link_to event.title, event_path(event), class: "text-blue-400/70 hover:underline" %>
+            <span class="text-gray-600 text-sm"><%= event.date.strftime("%b %-d, %Y") %></span>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p class="text-gray-500 text-sm">None.</p>
     <% end %>
-  </ul>
+  </section>
+
+  <section>
+    <h2 class="text-xl font-bold mb-3">Attended Events</h2>
+
+    <h3 class="text-sm font-semibold uppercase tracking-wide text-gray-400 mb-2">Upcoming (<%= @upcoming_attended.count %>)</h3>
+    <% if @upcoming_attended.any? %>
+      <ul class="mb-4 space-y-1">
+        <% @upcoming_attended.each do |event| %>
+          <li class="flex items-center justify-between">
+            <%= link_to event.title, event_path(event), class: "text-blue-400 hover:underline" %>
+            <span class="text-gray-500 text-sm"><%= event.date.strftime("%b %-d, %Y") %></span>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p class="text-gray-500 text-sm mb-4">None.</p>
+    <% end %>
+
+    <h3 class="text-sm font-semibold uppercase tracking-wide text-gray-400 mb-2">Past (<%= @past_attended.count %>)</h3>
+    <% if @past_attended.any? %>
+      <ul class="space-y-1">
+        <% @past_attended.each do |event| %>
+          <li class="flex items-center justify-between">
+            <%= link_to event.title, event_path(event), class: "text-blue-400/70 hover:underline" %>
+            <span class="text-gray-600 text-sm"><%= event.date.strftime("%b %-d, %Y") %></span>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p class="text-gray-500 text-sm">None.</p>
+    <% end %>
+  </section>
 </div>

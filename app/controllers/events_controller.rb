@@ -4,7 +4,8 @@ class EventsController < ApplicationController
   before_action :authorize_creator!, only: [ :edit, :update, :destroy ]
 
   def index
-    @events = Event.all
+    @upcoming_events = Event.upcoming
+    @past_events = Event.past
   end
 
   def show

@@ -5,4 +5,7 @@ class Event < ApplicationRecord
   belongs_to :creator, class_name: "User"
 
   validates :title, :description, :date, :location, :creator, presence: true
+
+  scope :upcoming, -> { where("date >= ?", Time.current).order(date: :asc) }
+  scope :past, -> { where("date < ?", Time.current).order(date: :desc) }
 end
